@@ -281,7 +281,7 @@
   </div>
   
 <div id="tab-w7" class="tab-panel">
-    <div class="alert">🔴 황금연휴 기간(5/4~5/6) 평균 <b>4.34점 · 1-2점 8.0%</b> — 평시(5.1%) 대비 <b>+2.9%p 악화</b>. 특히 5/6(수) 9.8%로 주간 최고위험일. 연휴 인력 운영 재검토 필요</div>
+    <div class="alert">🔴 황금연휴 기간(5/4~5/6) 평균 <b>4.34점 · 1-2점 8.0%</b> — 평시(5.1%) 대비 <b>+2.9%p 악화</b>. </div>
     <div class="card">
       <p class="ct">셀별 평균 평점 & 1-2점 비율</p>
       <div style="display:flex;gap:14px;margin-bottom:8px;font-size:10px;color:#888">
@@ -316,7 +316,7 @@
   </div>
   
 <div id="tab-w8" class="tab-panel">
-    <div class="alert">🔴 황금연휴 기간(5/4~5/6) 평균 <b>4.34점 · 1-2점 8.0%</b> — 평시(5.1%) 대비 <b>+2.9%p 악화</b>. </div>
+    <div class="alert">🔴 황금연휴 기간(5/4~5/6) 평균 <b>4.34점 · 1-2점 8.0%</b> — 평시(5.1%) 대비 <b>+2.9%p 악화</b>. 특히 5/6(수) 9.8%로 주간 최고위험일. 연휴 인력 운영 재검토 필요</div>
     <div class="card">
       <p class="ct">셀별 평균 평점 & 1-2점 비율</p>
       <div style="display:flex;gap:14px;margin-bottom:8px;font-size:10px;color:#888">
@@ -393,11 +393,14 @@ function buildCellGrid(week){
   if(grid.children.length>0) return;
   CELLS.forEach(function(cell,i){
     var avg=avgs[i],pct=pcts[i];
-    var ac=avg>=4.6?'#27500A':avg>=4.4?'#BA7517':'#A32D2D';
+    var bg=avg>=4.6?'#EAF3DE':avg>=4.4?'#FEF3CD':'#FCEBEB';
+    var ac=avg>=4.6?'#27500A':avg>=4.4?'#7A4F00':'#A32D2D';
+    var bdr=avg>=4.6?'#A8D07A':avg>=4.4?'#F5C842':'#F5A0A0';
     var pc=pct>=8?'#A32D2D':pct>=5?'#D85A30':pct>=3.5?'#BA7517':'#27500A';
     var btn=document.createElement('div');
     btn.className='cell-btn';btn.dataset.cell=cell;btn.dataset.week=week;
-    btn.innerHTML='<div class="cn">'+cell+'</div><div class="ca" style="color:'+ac+'">'+avg.toFixed(2)+'</div><div class="cp" style="color:'+pc+'">1-2점 '+pct+'%</div>';
+    btn.style.background=bg;btn.style.borderColor=bdr;
+    btn.innerHTML='<div class="cn">'+cell+'</div><div class="ca" style="color:'+ac+';font-weight:700">'+avg.toFixed(2)+'</div><div class="cp" style="color:'+pc+'">1-2점 '+pct+'%</div>';
     btn.onclick=function(){selectCell(week,cell);};
     grid.appendChild(btn);
   });
@@ -408,7 +411,11 @@ function selectCell(week,cell){
   document.querySelectorAll('#cell-grid-'+week+' .cell-btn').forEach(function(b){
     var on=b.dataset.cell===cell; b.classList.toggle('active',on);
     var i=CELLS.indexOf(b.dataset.cell);
-    b.querySelector('.ca').style.color=on?'#fff':(avgs[i]>=4.6?'#27500A':avgs[i]>=4.4?'#BA7517':'#A32D2D');
+    var bg_r=avgs[i]>=4.6?'#EAF3DE':avgs[i]>=4.4?'#FEF3CD':'#FCEBEB';
+    var bdr_r=avgs[i]>=4.6?'#A8D07A':avgs[i]>=4.4?'#F5C842':'#F5A0A0';
+    if(on){b.style.background='#1a1a18';b.style.borderColor='#1a1a18';}
+    else{b.style.background=bg_r;b.style.borderColor=bdr_r;}
+    b.querySelector('.ca').style.color=on?'#fff':(avgs[i]>=4.6?'#27500A':avgs[i]>=4.4?'#7A4F00':'#A32D2D');
     b.querySelector('.cp').style.color=on?'#ddd':(pcts[i]>=8?'#A32D2D':pcts[i]>=5?'#D85A30':pcts[i]>=3.5?'#BA7517':'#27500A');
   });
   var dk=DATAKEY[week];
